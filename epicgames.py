@@ -1,17 +1,22 @@
 import nextcord
 from nextcord.ext import commands, tasks
 import requests
-from datetime import datetime, timezone
+from datetime import datetime, timezone, timedelta
 
 class EpicGamesNotifier(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.epic_channel_id = None
         self.start_notifier.start()
+        self.total_announcements = 0
 
     @commands.command(name="setepicgames")
     async def set_epic_games_channel(self, ctx, channel: nextcord.TextChannel):
         """Set channel untuk pemberitahuan game gratis Epic Games."""
+        if not channel.permissions_for(ctx.guild.me).send_messages:
+            await ctx.send(f"❌ Saya tidak memiliki izin untuk mengirim pesan ke {channel.mention}.")
+            return
+
         self.epic_channel_id = channel.id
         await ctx.send(f"✅ Channel Epic Games Notifications telah diatur ke {channel.mention}")
 
@@ -37,9 +42,62 @@ class EpicGamesNotifier(commands.Cog):
         else:
             await ctx.send("⚠️ Tidak ada game gratis yang tersedia saat ini.")
 
-    @tasks.loop(minutes=60)
+    @commands.command(name="setepicinterval")
+    async def set_epic_interval(self, ctx, hours: int):
+        """Atur interval pemberitahuan Epic Games"""
+
+        if hours < 1:
+            await ctx.send("❌ Interval minimal adalah 1 jam.")
+            return
+        
+        self.start_notifier.change_interval(hours=hours)
+        await ctx.send(f"✅ Interval pemberitahuan diatur ke setiap {hours} jam.")
+
+    @commands.command(name="scheduleepic")
+    async def schedule_epic(self, ctx, time: str):
+        """Menjadwalkan pesan game Epic Games"""
+
+        try:
+            target_time = datetime.strptime(time, "%H:%M").time()
+            now = datetime.now().time()
+
+            if target_time < now:
+                await ctx.send("❌ Waktu tidak valid. Pastikan waktu di masa mendatang.")
+                return
+            
+            self.scheduled_time = target_time
+            await ctx.send(f"✅ Pesan akan dikirim setiap hari pada pukul {time}.")
+        except ValueError:
+            await ctx.send("❌ Format waktu salah. Gunakan format HH:MM.")
+
+    @commands.command(name="setepicdm")
+    async def set_epic_dm(self, ctx, user: nextcord.User):
+        """Set user untuk pemberitahuan game grais Epic Games via DM"""
+        if not isinstance(user, nextcord.User):
+            await ctx.send("❌ Anda harus mencantumkan pengguna yang valid.")
+            return
+        
+        try:
+            test_message = "✅ Anda telah diatur untuk menerima pemberitahuan Epic Games melalui DM."
+            await user.send(test_message)
+
+            self.epic_dm_user_id = user.id
+            await ctx.send(f"✅ Pemberitahuan Epic Games akan dikirimkan ke {user.mention}.")
+
+        except nextcord.Forbidden:
+            await ctx.send(f"❌ Tidak dapat mengirim pesan ke {user.mention}. Pastikan DM Anda terbuka.")
+
+    @commands.command(name="epicstats")
+    async def epic_stats(self, ctx):
+        """Lihat statistik pemberitahuan Epic Games"""
+        await ctx.send(f"📊 Total game gratis yang diumumkan sejauh ini: {self.total_announcements}")
+
+    @tasks.loop(hours=24)
     async def start_notifier(self):
         """Loop tugas untuk pemberitahuan otomatis."""
+
+        if games:
+            self.total_announcements += len(games)
         if not self.epic_channel_id:
             return
 
@@ -47,30 +105,56 @@ class EpicGamesNotifier(commands.Cog):
         if not channel:
             return
 
-        now = datetime.now(timezone.utc)
-        if now.weekday() == 0:  # 0 = Senin
-            games = self.get_free_games()
-            if games:
-                message = "**Game Gratis Minggu Ini di Epic Games:**\n"
-                for game in games:
-                    message += (
-                        f"🎮 **{game['title']}**\n"
-                        f"{game['description']}\n"
-                        f"📅 Gratis dari {game['start_date']} hingga {game['end_date']}\n\n"
-                    )
-                await channel.send(message)
-            else:
-                await channel.send("⚠️ Tidak ada game gratis minggu ini di Epic Games Store.")
+        now = datetime.now(timezone.utc).date()
+        games = self.get_free_games()
 
-        if now.weekday() == 5:  # 5 = Sabtu
-            await channel.send("⚠️ **Jangan lupa klaim game gratis di Epic Games!** Periode gratis akan segera berakhir.")
+        new_release_message = " "
+        free_games_message = " "
+
+        for game in games:
+            release_date = datetime.strptime(game["start_date"], "%d %B %Y").date()
+            end_date = datetime.strptime(game["end_date"], "%d %B %Y").date()
+
+            if release_date == now and game["title"] not in self.released_games:
+                new_release_message += (
+                    f"🎉 **Game Baru Dirilis di Epic Games!**\n"
+                    f"🎮 **{game['title']}**\n"
+                    f"{game['description']}\n"
+                    f"📅 Gratis mulai hari ini: {game['start_date']} hingga {game['end_date']}\n\n"
+                    f"🔗 [Klaim Sekarang](https://store.epicgames.com/p/{game['title'].replace(' ', '-').lower()})\n\n"
+                )
+                self.released_games.add(game["title"])
+            
+            if end_date - now == timedelta(days=1):
+                message += (
+                    f"⚠️ **Jangan lupa klaim game gratis berikut di Epic Games!**\n"
+                    f"🎮 **{game['title']}**\n"
+                    f"{game['description']}\n"
+                    f"📅 Gratis hingga {game['end_date']}\n\n"
+                    f"🔗 [Klaim Sekarang](https://store.epicgames.com/p/{game['title'].replace(' ', '-').lower()})\n\n"
+                    )
+            elif end_date == now:
+                message += (
+                    f"🚨 **Hari ini adalah hari terakhir untuk klaim game gratis!**\n"
+                    f"🎮 **{game['title']}**\n"
+                    f"{game['description']}\n"
+                    f"📅 Gratis hingga hari ini: {game['end_date']}\n\n"
+                    f"🔗 [Klaim Sekarang](https://store.epicgames.com/p/{game['title'].replace(' ', '-').lower()})\n\n"
+                )
+
+        if new_release_message:
+            await channel.send(new_release_message)
+
+        if free_games_message:
+            await channel.send(free_games_message)
 
     def get_free_games(self):
         """Ambil data game gratis dari Epic Games Store API."""
         url = "https://store-site-backend-static.ak.epicgames.com/freeGamesPromotions"
         try:
-            response = requests.get(url)
+            response = requests.get(url, timeout=10)
             if response.status_code != 200:
+                print(f"Error: API mengembalikan status {response.status_code}")
                 return []
 
             data = response.json()

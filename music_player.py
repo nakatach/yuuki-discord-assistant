@@ -9,7 +9,18 @@ class MusicPlayer(commands.Cog):
         self.voice_clients = {}
         self.queue = {}
         self.is_playing = {}
-        self.yt_dlp_options = {"format": "bestaudio/best"}
+        self.yt_dlp_options = {
+            "format": "bestaudio/best",
+            "cookiefile": "C:\\Users\\MyBook Hype AMD\\Desktop\\Yuuki\\cookies.json",
+            "outtmpl": "downloads/%(id)s.%(ext)s",
+            "postprocessors": [{
+                "key": "FFmpegAudio",
+                "preferredcodec": "mp3",
+                "preferredquality": "192",
+            }],
+            "noplaylist": True,
+            "quiet": True,
+}
         self.ytdl = yt_dlp.YoutubeDL(self.yt_dlp_options)
         self.ffmpeg_options = {'options': '-vn -reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5'}
 
@@ -20,7 +31,7 @@ class MusicPlayer(commands.Cog):
     def search_youtube(self, query):
         try:
             result = self.ytdl.extract_info(f"ytsearch:{query}", download=False)
-            video = result['entries'][0]  # Ambil hasil pertama dari pencarian
+            video = result['entries'][0]
             return video['webpage_url'], video['title']
         except Exception as e:
             print(f"Error searching on YouTube: {e}")

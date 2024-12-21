@@ -12,44 +12,53 @@ intents.message_content = True
 bot = commands.Bot(command_prefix='y!', intents=intents)
 
 @bot.command(name="h")
-async def SendMessage(ctx):
-    await ctx.send("""1. URL SHORTENER
-Use <y!shorten> <link> to shorten your URL
+async def send_help_message(ctx):
+    await ctx.send("""
+**YUUKI BOT COMMAND LIST**
 
-2. MUSIC PLAYER
-Use <y!play> <title> to play music
-Use <y!pause> to pause
-Use <y!resume> to resume
-Use <y!skip> to skip the current music
-Use <y!q> to see the queue
-Use <y!remove> <song index> to remove a music from the queue
-Use <y!stop> to disconnect the bot from the voice channel
+1. **URL SHORTENER**
+   Use `y!shorten <link>` to shorten your URL.
 
-3. TO DO LIST
-Use <y!addtask> <taskname> to add a task to your to-do list
-Use <y!removetask> <task index> to remove a task
-Use <y!viewtasks> to see the to-do list
-Use <y!clear> to remove all the tasks from the list
-Use <y!completetask> <task index> to mark a task as completed
+2. **MUSIC PLAYER**
+   Use `y!play <title>` to play music.
+   Use `y!play <youtube link>` to play music.
+   Use `y!pause` to pause.
+   Use `y!resume` to resume.
+   Use `y!skip` to skip the current music.
+   Use `y!q` to see the queue.
+   Use `y!remove <song index>` to remove a song from the queue.
+   Use `y!stop` to disconnect the bot from the voice channel.
 
-4. WEATHER FORECAST
-Use <y!setweather> <#channel name> <time> to set a weather forecast
-Use <y!stopweather> to stop the weather forecast
-Use <y!startweather> to start the weather forecast that stopped before
-Use <y!checkweather> <city name> to check the current weather
+3. **TO-DO LIST**
+   Use `y!addtask <taskname>` to add a task.
+   Use `y!removetask <task index>` to remove a task.
+   Use `y!viewtasks` to view the to-do list.
+   Use `y!clear` to clear the to-do list.
+   Use `y!completetask <task index>` to mark a task as completed.
 
-5. EPIC GAMES CHECKER
-Use <y!checkgames> to check the current free games in Epic Games Store
-Use <y!setepicgames> to set a reminder for free games in Epic Games Store
-""")
+4. **WEATHER FORECAST**
+   Use `y!setweather <#channel> <city> <time>` to set a weather forecast.
+   Use `y!stopweather` to stop the weather forecast.
+   Use `y!startweather` to restart the weather forecast.
+   Use `y!checkweather <city>` to get the current weather.
 
-@bot.command()
-async def shorten(ctx, link: str):
-    from url_shortener import shorten_link
-    result = shorten_link(link)
-    await ctx.send(result)
+5. **EPIC GAMES CHECKER**
+   Use `y!checkgames` to check free games in Epic Games Store.
+   Use `y!setepicgames <#channel>` to set reminders for free games.
+   Use `y!stopepicgames` to stop free game notifications.
+   Use `y!setepicdm <@user>` to receive free game reminders via DM.
+   Use `y!setepicinterval <hours>` to set the notification interval.
+   Use `y!scheduleepic <HH:MM>` to schedule daily free game reminders.
+   Use `y!epicstats` to view statistics for Epic Games notifications.
+
+6. **CLASS REMINDER**
+   Use `y!addclass <subject> <day> <time>` to add a class reminder.
+   Use `y!removeclass <class index>` to remove a class.
+   Use `y!viewclasses` to view all class reminders.
+    """)
 
 extensions = [
+    "url_shortener",
     "weather",
     "class_reminder",
     "music_player",
