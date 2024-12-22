@@ -151,7 +151,6 @@ class Weather(commands.Cog):
         await self.bot.wait_until_ready()
 
     @commands.command(name="setweather")
-    @commands.has_permissions(administrator=True)
     async def set_weather(self, ctx, channel: nextcord.TextChannel, city: str, time: str):
         """
         Mengatur channel, kota, dan waktu untuk ramalan cuaca harian

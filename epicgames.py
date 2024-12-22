@@ -92,6 +92,46 @@ class EpicGamesNotifier(commands.Cog):
         """Lihat statistik pemberitahuan Epic Games"""
         await ctx.send(f"📊 Total game gratis yang diumumkan sejauh ini: {self.total_announcements}")
 
+    @commands.command(name="search")
+    async def search_game(self, ctx, *, game_name: str):
+        """Mencari informasi game di Epic Games Store"""
+        url = "https://store-site-backend-static.ak.epicgames.com/freeGamesPromotions"
+        try:
+            response = requests.get(url, timeout=10)
+            if response.status_code != 200:
+                await ctx.send(f"❌ Error: Tidak dapat mengakses API Epic Games (status {response.status_code}).")
+                return
+            
+            data = response.json()
+            games =  data["data"]["Catalog"]["searchStore"]["elements"]
+
+            found_game = None
+            for game in games:
+                if game_name.lower() in game["title"].lower():
+                    found_game = game
+                    break
+
+            if not found_game:
+                await ctx.send(f"⚠️ Game dengan nama **{game_name}** tidak ditemukan di Epic Games Store.")
+                return
+            
+            title = found_game["title"]
+            description = found_game.get("description", "Tidak ada deskripsi yang tersedia.")
+            price =  "Gratis" if "promotions" in found_game and found_game["promotions"].get("promotionalOffers") else "Harga tidak tersedia"
+            store_link = f"https://store.epicgames.com/p/{title.replace(' ', '-').lower()}"
+
+            message = (
+                f"🎮 **{title}**\n"
+                f"{description}\n"
+                f"💰 Harga: {price}\n"
+                f"🔗 [Lihat di Store]({store_link})"
+            )
+            await ctx.send(message)
+
+        except Exception as e:
+            print(f"Error saat mencari game: {e}")
+            await ctx.send("❌ Terjadi kesalahan saat mencari game. Coba lagi nanti.")
+
     @tasks.loop(hours=24)
     async def start_notifier(self):
         """Loop tugas untuk pemberitahuan otomatis."""

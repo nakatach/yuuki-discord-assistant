@@ -29,20 +29,13 @@ async def send_help_message(ctx):
    Use `y!remove <song index>` to remove a song from the queue.
    Use `y!stop` to disconnect the bot from the voice channel.
 
-3. **TO-DO LIST**
-   Use `y!addtask <taskname>` to add a task.
-   Use `y!removetask <task index>` to remove a task.
-   Use `y!viewtasks` to view the to-do list.
-   Use `y!clear` to clear the to-do list.
-   Use `y!completetask <task index>` to mark a task as completed.
-
-4. **WEATHER FORECAST**
+3. **WEATHER FORECAST**
    Use `y!setweather <#channel> <city> <time>` to set a weather forecast.
    Use `y!stopweather` to stop the weather forecast.
    Use `y!startweather` to restart the weather forecast.
    Use `y!checkweather <city>` to get the current weather.
 
-5. **EPIC GAMES CHECKER**
+4. **EPIC GAMES**
    Use `y!checkgames` to check free games in Epic Games Store.
    Use `y!setepicgames <#channel>` to set reminders for free games.
    Use `y!stopepicgames` to stop free game notifications.
@@ -50,20 +43,23 @@ async def send_help_message(ctx):
    Use `y!setepicinterval <hours>` to set the notification interval.
    Use `y!scheduleepic <HH:MM>` to schedule daily free game reminders.
    Use `y!epicstats` to view statistics for Epic Games notifications.
-
-6. **CLASS REMINDER**
-   Use `y!addclass <subject> <day> <time>` to add a class reminder.
-   Use `y!removeclass <class index>` to remove a class.
-   Use `y!viewclasses` to view all class reminders.
+                   
+3. **TASK REMINDER**
+   Use `y!addtask <taskname> <YYYY-MM-DD HH:MM>` to add a task.
+   Use `y!removetask <taskname>` to remove a task.
+   Use `y!listtasks` to view all the task and their deadline.
+   Use `y!setreminder <taskname> <hours>` to set a reminder before a task's deadline.
+   Use `y!setreminderchannel <#channel>` to set the channel for task notification.
+   Use `y!completetask <taskname>` to mark a task as completed.
+   Use `y!cleartask` to view all tasks.
     """)
 
 extensions = [
     "url_shortener",
     "weather",
-    "class_reminder",
     "music_player",
-    "to_do_list",
-    "epicgames"
+    "epicgames",
+    "taskreminder"
 ]
 
 for ext in extensions:
