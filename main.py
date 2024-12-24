@@ -45,12 +45,12 @@ async def send_help_message(ctx):
    Use `y!epicstats` to view statistics for Epic Games notifications.
                    
 3. **TASK REMINDER**
-   Use `y!addtask <taskname> <YYYY-MM-DD HH:MM>` to add a task.
-   Use `y!removetask <taskname>` to remove a task.
+   Use `y!addtask <"taskname"> <"YYYY-MM-DD HH:MM">` to add a task.
+   Use `y!removetask <"taskname">` to remove a task.
    Use `y!listtasks` to view all the task and their deadline.
-   Use `y!setreminder <taskname> <hours>` to set a reminder before a task's deadline.
+   Use `y!setreminder <"taskname"> <hours>` to set a reminder before a task's deadline.
    Use `y!setreminderchannel <#channel>` to set the channel for task notification.
-   Use `y!completetask <taskname>` to mark a task as completed.
+   Use `y!completetask <"taskname">` to mark a task as completed.
    Use `y!cleartask` to view all tasks.
     """)
 
@@ -59,7 +59,8 @@ extensions = [
     "weather",
     "music_player",
     "epicgames",
-    "taskreminder"
+    "taskreminder",
+    "chatbot"
 ]
 
 for ext in extensions:
