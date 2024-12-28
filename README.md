@@ -20,14 +20,14 @@ A Discord bot built with Groq, designed to assist with daily tasks and provide c
    Use `y!shorten <link>` to shorten your URL.
 
 - **MUSIC PLAYER**
-   Use `y!play <title>` to play music.
-   Use `y!play <youtube link>` to play music.
-   Use `y!pause` to pause.
-   Use `y!resume` to resume.
-   Use `y!skip` to skip the current music.
-   Use `y!q` to see the queue.
-   Use `y!remove <song index>` to remove a song from the queue.
-   Use `y!stop` to disconnect the bot from the voice channel.
+  - Use `y!play <title>` to play music.
+  - Use `y!play <youtube link>` to play music.
+  - Use `y!pause` to pause.
+  - Use `y!resume` to resume.
+  - Use `y!skip` to skip the current music.
+  - Use `y!q` to see the queue.
+  - Use `y!remove <song index>` to remove a song from the queue.
+  - Use `y!stop` to disconnect the bot from the voice channel.
 
 - **WEATHER FORECAST**
    Use `y!setweather <#channel> <city> <time>` to set a weather forecast.
