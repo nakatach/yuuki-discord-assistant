@@ -16,10 +16,10 @@ A Discord bot built with Groq, designed to assist with daily tasks and provide c
 
 ## Commands
 
-- 1. **URL SHORTENER**
+- **URL SHORTENER**
    Use `y!shorten <link>` to shorten your URL.
 
-- 2. **MUSIC PLAYER**
+- **MUSIC PLAYER**
    Use `y!play <title>` to play music.
    Use `y!play <youtube link>` to play music.
    Use `y!pause` to pause.
@@ -29,13 +29,13 @@ A Discord bot built with Groq, designed to assist with daily tasks and provide c
    Use `y!remove <song index>` to remove a song from the queue.
    Use `y!stop` to disconnect the bot from the voice channel.
 
-- 3. **WEATHER FORECAST**
+- **WEATHER FORECAST**
    Use `y!setweather <#channel> <city> <time>` to set a weather forecast.
    Use `y!stopweather` to stop the weather forecast.
    Use `y!startweather` to restart the weather forecast.
    Use `y!checkweather <city>` to get the current weather.
 
-- 4. **EPIC GAMES**
+- **EPIC GAMES**
    Use `y!checkgames` to check free games in Epic Games Store.
    Use `y!setepicgames <#channel>` to set reminders for free games.
    Use `y!stopepicgames` to stop free game notifications.
@@ -44,7 +44,7 @@ A Discord bot built with Groq, designed to assist with daily tasks and provide c
    Use `y!scheduleepic <HH:MM>` to schedule daily free game reminders.
    Use `y!epicstats` to view statistics for Epic Games notifications.
                    
-- 5. **TASK REMINDER**
+- **TASK REMINDER**
    Use `y!addtask <"taskname"> <"YYYY-MM-DD HH:MM">` to add a task.
    Use `y!removetask <"taskname">` to remove a task.
    Use `y!listtasks` to view all the task and their deadline.
