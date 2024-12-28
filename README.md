@@ -30,28 +30,28 @@ A Discord bot built with Groq, designed to assist with daily tasks and provide c
   - Use `y!stop` to disconnect the bot from the voice channel.
 
 - **WEATHER FORECAST**
-   Use `y!setweather <#channel> <city> <time>` to set a weather forecast.
-   Use `y!stopweather` to stop the weather forecast.
-   Use `y!startweather` to restart the weather forecast.
-   Use `y!checkweather <city>` to get the current weather.
+  - Use `y!setweather <#channel> <city> <time>` to set a weather forecast.
+  - Use `y!stopweather` to stop the weather forecast.
+  - Use `y!startweather` to restart the weather forecast.
+  - Use `y!checkweather <city>` to get the current weather.
 
 - **EPIC GAMES**
-   Use `y!checkgames` to check free games in Epic Games Store.
-   Use `y!setepicgames <#channel>` to set reminders for free games.
-   Use `y!stopepicgames` to stop free game notifications.
-   Use `y!setepicdm <@user>` to receive free game reminders via DM.
-   Use `y!setepicinterval <hours>` to set the notification interval.
-   Use `y!scheduleepic <HH:MM>` to schedule daily free game reminders.
-   Use `y!epicstats` to view statistics for Epic Games notifications.
+  - Use `y!checkgames` to check free games in Epic Games Store.
+  - Use `y!setepicgames <#channel>` to set reminders for free games.
+  - Use `y!stopepicgames` to stop free game notifications.
+  - Use `y!setepicdm <@user>` to receive free game reminders via DM.
+  - Use `y!setepicinterval <hours>` to set the notification interval.
+  - Use `y!scheduleepic <HH:MM>` to schedule daily free game reminders.
+  - Use `y!epicstats` to view statistics for Epic Games notifications.
                    
 - **TASK REMINDER**
-   Use `y!addtask <"taskname"> <"YYYY-MM-DD HH:MM">` to add a task.
-   Use `y!removetask <"taskname">` to remove a task.
-   Use `y!listtasks` to view all the task and their deadline.
-   Use `y!setreminder <"taskname"> <hours>` to set a reminder before a task's deadline.
-   Use `y!setreminderchannel <#channel>` to set the channel for task notification.
-   Use `y!completetask <"taskname">` to mark a task as completed.
-   Use `y!cleartask` to view all tasks.
+  - Use `y!addtask <"taskname"> <"YYYY-MM-DD HH:MM">` to add a task.
+  - Use `y!removetask <"taskname">` to remove a task.
+  - Use `y!listtasks` to view all the task and their deadline.
+  - Use `y!setreminder <"taskname"> <hours>` to set a reminder before a task's deadline.
+  - Use `y!setreminderchannel <#channel>` to set the channel for task notification.
+  - Use `y!completetask <"taskname">` to mark a task as completed.
+  - Use `y!cleartask` to view all tasks.
 
 ## Setup
 
