@@ -99,7 +99,7 @@ Create a `.env` file with the following:
 - CUTTLY_API_KEY=your_cuttly_api_key_here
 - GROQ_API_KEY=your_groq_api_key_here
 - USER_ID=your_discord_user_id_here
-- 
+  
 ## Contributing
 
 Feel free to submit issues and pull requests!
