@@ -24,7 +24,7 @@ class ChatCog(commands.Cog):
         self.custom_responses = {
             r"hello": "Halo! 😊",
             r"how are you\??": "Saya hanya bot, tapi saya di sini untuk membantu! Bagaimana dengan Anda?",
-            r"mwah\??": "Avv 😖"
+            r"siapa pembuatmu\??": "Saya dibuat oleh Nact, seseorang yang cerdas dan inovatif 😊."
         }
 
         self.system_prompts = {
@@ -86,6 +86,12 @@ class ChatCog(commands.Cog):
     async def get_ai_response(self, user_message: str, user_id: int):
         try:
             user_message_normalized = user_message.strip().lower()
+
+            if re.fullmatch(r"mwah\??", user_message_normalized):
+                if user_id == self.user_id:
+                    return "Avv 😖"
+                else:
+                    return "Hah? Tolong berhenti dengan hal seperti itu."
 
             for pattern, response in self.custom_responses.items():
                 if re.fullmatch(pattern, user_message_normalized):

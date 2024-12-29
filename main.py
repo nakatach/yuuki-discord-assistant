@@ -15,6 +15,7 @@ bot = commands.Bot(command_prefix='y!', intents=intents)
 async def send_help_message(ctx):
     await ctx.send("""
 **YUUKI BOT COMMAND LIST**
+**USE `y!chat <message>` TO CHAT WITH YUUKI**
 
 1. **URL SHORTENER**
    Use `y!shorten <link>` to shorten your URL.
@@ -39,12 +40,9 @@ async def send_help_message(ctx):
    Use `y!checkgames` to check free games in Epic Games Store.
    Use `y!setepicgames <#channel>` to set reminders for free games.
    Use `y!stopepicgames` to stop free game notifications.
-   Use `y!setepicdm <@user>` to receive free game reminders via DM.
-   Use `y!setepicinterval <hours>` to set the notification interval.
    Use `y!scheduleepic <HH:MM>` to schedule daily free game reminders.
-   Use `y!epicstats` to view statistics for Epic Games notifications.
                    
-3. **TASK REMINDER**
+5. **TASK REMINDER**
    Use `y!addtask <"taskname"> <"YYYY-MM-DD HH:MM">` to add a task.
    Use `y!removetask <"taskname">` to remove a task.
    Use `y!listtasks` to view all the task and their deadline.
@@ -52,6 +50,13 @@ async def send_help_message(ctx):
    Use `y!setreminderchannel <#channel>` to set the channel for task notification.
    Use `y!completetask <"taskname">` to mark a task as completed.
    Use `y!cleartask` to view all tasks.
+                   
+6. **STEAM**
+   Use `y!searchsteam <game name>` to search game on Steam.
+   Use `y!setsteam <#channel>` to set a reminder for Steam discounted games.
+   Use `y!setsteamprice <prices without commas or dots>` to set a maximum price for Steam reminder.
+   Use `y!stopsteam` to stop Steam reminder.
+   Use `y!schedulesteam <HH:MM>` to schedule daily Steam discounted games notification.
     """)
 
 extensions = [
@@ -60,7 +65,8 @@ extensions = [
     "music_player",
     "epicgames",
     "taskreminder",
-    "chatbot"
+    "chatbot",
+    "steam",
 ]
 
 for ext in extensions:
