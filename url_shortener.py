@@ -13,9 +13,9 @@ class URLShortener(commands.Cog):
         self.base_url = "https://cutt.ly/api/api.php"
 
     def shorten_link(self, full_link):
-        """Memperpendek URL menggunakan API Cutt.ly."""
+        """Shorten URL using the Cutt.ly API."""
         if not self.api_key:
-            return "Error: API key untuk Cutt.ly tidak ditemukan. Pastikan sudah disetel di file .env."
+            return "Error: Cutt.ly API key not found. Ensure it is set in the .env file."
 
         payload = {"key": self.api_key, "short": full_link}
         response = requests.get(self.base_url, params=payload)
@@ -29,9 +29,9 @@ class URLShortener(commands.Cog):
             status = data["url"]["status"]
             return f"Error Status: {status}"
 
-    @commands.command(name="shorten")
+    @commands.command(name="short")
     async def shorten_command(self, ctx, link: str):
-        """Command untuk memperpendek URL."""
+        """Command to shorten a URL."""
         result = self.shorten_link(link)
         await ctx.send(result)
 

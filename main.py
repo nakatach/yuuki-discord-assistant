@@ -13,51 +13,88 @@ bot = commands.Bot(command_prefix='y!', intents=intents)
 
 @bot.command(name="h")
 async def send_help_message(ctx):
-    await ctx.send("""
-**YUUKI BOT COMMAND LIST**
-**USE `y!chat <message>` TO CHAT WITH YUUKI**
+    embed = nextcord.Embed(
+        title="YUUKI BOT COMMAND LIST",
+        description="**USE `y!chat <message>` TO CHAT WITH YUUKI**",
+        color=0x00ff00
+    )
 
-1. **URL SHORTENER**
-   Use `y!shorten <link>` to shorten your URL.
+    embed.add_field(
+        name="1. URL SHORTENER",
+        value="`y!short <link>` - Shorten your URL.",
+        inline=False
+    )
 
-2. **MUSIC PLAYER**
-   Use `y!play <title>` to play music.
-   Use `y!play <youtube link>` to play music.
-   Use `y!pause` to pause.
-   Use `y!resume` to resume.
-   Use `y!skip` to skip the current music.
-   Use `y!q` to see the queue.
-   Use `y!remove <song index>` to remove a song from the queue.
-   Use `y!stop` to disconnect the bot from the voice channel.
+    embed.add_field(
+        name="2. MUSIC PLAYER",
+        value=(
+            "`y!play <title>` - Play music.\n"
+            "`y!play <youtube link>` - Play music.\n"
+            "`y!pause` - Pause the music.\n"
+            "`y!resume` - Resume the music.\n"
+            "`y!skip` - Skip the current music.\n"
+            "`y!q` - View the queue.\n"
+            "`y!remove <song index>` - Remove a song from the queue.\n"
+            "`y!stop` - Disconnect the bot from the voice channel."
+        ),
+        inline=False
+    )
 
-3. **WEATHER FORECAST**
-   Use `y!setweather <#channel> <city> <time>` to set a weather forecast.
-   Use `y!stopweather` to stop the weather forecast.
-   Use `y!startweather` to restart the weather forecast.
-   Use `y!checkweather <city>` to get the current weather.
+    embed.add_field(
+        name="3. WEATHER FORECAST",
+        value=(
+            "`y!setw <#channel> <city> <time>` - Set a weather forecast.\n"
+            "`y!stopw` - Stop the weather forecast.\n"
+            "`y!startw` - Restart the weather forecast.\n"
+            "`y!checkw <city>` - Get the current weather."
+        ),
+        inline=False
+    )
 
-4. **EPIC GAMES**
-   Use `y!checkgames` to check free games in Epic Games Store.
-   Use `y!setepicgames <#channel>` to set reminders for free games.
-   Use `y!stopepicgames` to stop free game notifications.
-   Use `y!scheduleepic <HH:MM>` to schedule daily free game reminders.
-                   
-5. **TASK REMINDER**
-   Use `y!addtask <"taskname"> <"YYYY-MM-DD HH:MM">` to add a task.
-   Use `y!removetask <"taskname">` to remove a task.
-   Use `y!listtasks` to view all the task and their deadline.
-   Use `y!setreminder <"taskname"> <hours>` to set a reminder before a task's deadline.
-   Use `y!setreminderchannel <#channel>` to set the channel for task notification.
-   Use `y!completetask <"taskname">` to mark a task as completed.
-   Use `y!cleartask` to view all tasks.
-                   
-6. **STEAM**
-   Use `y!searchsteam <game name>` to search game on Steam.
-   Use `y!setsteam <#channel>` to set a reminder for Steam discounted games.
-   Use `y!setsteamprice <prices without commas or dots>` to set a maximum price for Steam reminder.
-   Use `y!stopsteam` to stop Steam reminder.
-   Use `y!schedulesteam <HH:MM>` to schedule daily Steam discounted games notification.
-    """)
+    embed.add_field(
+        name="4. EPIC GAMES",
+        value=(
+            "`y!cg` - Check free games in Epic Games Store.\n"
+            "`y!seteg <#channel>` - Set reminders for free games.\n"
+            "`y!stopeg` - Stop free game notifications.\n"
+            "`y!scheg <HH:MM>` - Schedule daily free game reminders.\n"
+            "`y!setegr <role mention>` - Set a role to tag on free game reminders.\n"
+            "`y!rmvegr <role mention>` - Remove a role from free game reminders.\n"
+            "`y!checkegr` - Check what role will be tagged.\n"
+            "`y!ce` - View all Epic Games settings."
+        ),
+        inline=False
+    )
+
+    embed.add_field(
+        name="5. TASK REMINDER",
+        value=(
+            "`y!at <\"taskname\"> <\"YYYY-MM-DD HH:MM\">` - Add a task.\n"
+            "`y!rmvt <\"taskname\">` - Remove a task.\n"
+            "`y!lt` - View all tasks and their deadlines.\n"
+            "`y!setre <\"taskname\"> <hours>` - Set a reminder before a task's deadline.\n"
+            "`y!setrec <#channel>` - Set the channel for task notifications.\n"
+            "`y!compt <\"taskname\">` - Mark a task as completed.\n"
+            "`y!ct` - Delete all tasks."
+        ),
+        inline=False
+    )
+
+    embed.add_field(
+        name="6. STEAM",
+        value=(
+            "`y!ss <game name>` - Search for a game on Steam.\n"
+            "`y!setst <#channel>` - Set a reminder for Steam discounted games.\n"
+            "`y!setstp <price>` - Set a maximum price for Steam reminders.\n"
+            "`y!stopst` - Stop Steam reminders.\n"
+            "`y!schst <HH:MM>` - Schedule daily Steam discounted game notifications."
+        ),
+        inline=False
+    )
+
+    embed.set_footer(text="Yuuki Bot | Developed by Nact with ❤️")
+
+    await ctx.send(embed=embed)
 
 extensions = [
     "url_shortener",

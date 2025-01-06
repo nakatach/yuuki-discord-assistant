@@ -20,7 +20,7 @@ class MusicPlayer(commands.Cog):
             }],
             "noplaylist": True,
             "quiet": True,
-}
+        }
         self.ytdl = yt_dlp.YoutubeDL(self.yt_dlp_options)
         self.ffmpeg_options = {'options': '-vn -reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5'}
 

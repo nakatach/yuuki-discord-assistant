@@ -16,13 +16,13 @@ class SteamNotifier(commands.Cog):
         self.start_notifier.start()
 
     def is_admin_or_owner(self, ctx):
-        """Cek apakah pengguna adalah admin atau pemilik bot."""
+        """Check if the user is an admin or the bot owner."""
         user_id = os.getenv("USER_ID")
         return ctx.author.guild_permissions.administrator or str(ctx.author.id) == user_id
 
-    @commands.command(name="searchsteam")
+    @commands.command(name="ss")
     async def search_steam(self, ctx, *args):
-        """Cari game di Steam berdasarkan nama dan harga (opsional)."""
+        """Search for a game on Steam by name and optional price."""
         if len(args) == 1 and args[0].isdigit():
             max_price = int(args[0])
             games = self.search_steam_games(max_price=max_price)
@@ -31,94 +31,94 @@ class SteamNotifier(commands.Cog):
             games = self.search_steam_games(game_name=game_name)
         
         if games:
-            message = "**Hasil Pencarian di Steam:**\n"
+            message = "**Search Results on Steam:**\n"
             for game in games[:10]:
                 message += (
                     f"🎮 **{game['name']}**\n"
-                    f"💸 Harga: {game['price']}\n"
-                    f"🔗 [Link ke Steam Store]({game['url']})\n\n"
+                    f"💸 Price: {game['price']}\n"
+                    f"🔗 [Link to Steam Store]({game['url']})\n\n"
                 )
             await ctx.send(message)
         else:
-            await ctx.send("❌ Tidak ada hasil yang ditemukan untuk pencarian tersebut.")
+            await ctx.send("❌ No results found for that search.")
 
-    @commands.command(name="setsteamprice")
+    @commands.command(name="setstp")
     async def set_steam_price(self, ctx, price: int):
-        """Set batas harga maksimum (dalam Rupiah) untuk notifikasi diskon game."""
+        """Set the maximum price (in Rupiah) for game discount notifications."""
         if not self.is_admin_or_owner(ctx):
-            await ctx.send("❌ Anda tidak memiliki izin untuk menggunakan perintah ini.")
+            await ctx.send("❌ You do not have permission to use this command.")
             return
 
         if price < 0:
-            await ctx.send("❌ Harga tidak valid.")
+            await ctx.send("❌ Invalid price.")
             return
 
         self.steam_price_limit = price
-        await ctx.send(f"✅ Harga maksimum untuk notifikasi diskon diatur ke Rp {price:,}.")
+        await ctx.send(f"✅ Maximum price for discount notifications set to Rp {price:,}.")
 
-    @commands.command(name="setsteam")
+    @commands.command(name="setst")
     async def set_steam_channel(self, ctx, channel: nextcord.TextChannel):
-        """Set channel untuk pemberitahuan diskon Steam."""
+        """Set the channel for Steam discount notifications."""
         if not self.is_admin_or_owner(ctx):
-            await ctx.send("❌ Anda tidak memiliki izin untuk menggunakan perintah ini.")
+            await ctx.send("❌ You do not have permission to use this command.")
             return
 
         if not channel.permissions_for(ctx.guild.me).send_messages:
-            await ctx.send(f"❌ Saya tidak memiliki izin untuk mengirim pesan ke {channel.mention}.")
+            await ctx.send(f"❌ I do not have permission to send messages to {channel.mention}.")
             return
 
         self.steam_channel_id = channel.id
-        await ctx.send(f"✅ Channel Steam Notifications telah diatur ke {channel.mention}.")
+        await ctx.send(f"✅ Steam Notifications channel set to {channel.mention}.")
 
-    @commands.command(name="schedulesteam")
+    @commands.command(name="schst")
     async def schedule_steam(self, ctx, time_str: str):
-        """Menjadwalkan jam pengiriman notifikasi diskon Steam setiap hari."""
+        """Schedule the time for daily Steam discount notifications."""
         if not self.is_admin_or_owner(ctx):
-            await ctx.send("❌ Anda tidak memiliki izin untuk menggunakan perintah ini.")
+            await ctx.send("❌ You do not have permission to use this command.")
             return
 
         try:
             target_time = datetime.strptime(time_str, "%H:%M").time()
             self.scheduled_time = target_time
-            await ctx.send(f"✅ Notifikasi diskon Steam akan dikirim setiap hari pada pukul {time_str}.")
+            await ctx.send(f"✅ Steam discount notifications will be sent every day at {time_str}.")
         except ValueError:
-            await ctx.send("❌ Format waktu salah. Gunakan format HH:MM.")
+            await ctx.send("❌ Invalid time format. Use HH:MM format.")
 
-    @commands.command(name="stopsteam")
+    @commands.command(name="stopst")
     async def stop_steam(self, ctx):
-        """Hentikan notifikasi diskon Steam harian."""
+        """Stop daily Steam discount notifications."""
         if not self.is_admin_or_owner(ctx):
-            await ctx.send("❌ Anda tidak memiliki izin untuk menggunakan perintah ini.")
+            await ctx.send("❌ You do not have permission to use this command.")
             return
 
         self.scheduled_time = None
-        await ctx.send("✅ Notifikasi diskon Steam harian telah dihentikan.")
+        await ctx.send("✅ Daily Steam discount notifications have been stopped.")
 
     @tasks.loop(minutes=1)
     async def start_notifier(self):
-        """Loop tugas untuk pemberitahuan otomatis."""
+        """Task loop for automatic notifications."""
         if self.scheduled_time and datetime.now().time().hour == self.scheduled_time.hour and datetime.now().time().minute == self.scheduled_time.minute:
             if self.steam_channel_id and self.steam_price_limit:
                 channel = self.bot.get_channel(self.steam_channel_id)
                 if channel:
                     games = self.get_discounted_games()
                     if games:
-                        message = "**Game Diskon di Steam di Bawah Harga Maksimum:**\n"
+                        message = "**Discounted Games on Steam Below Maximum Price:**\n"
                         for game in games:
                             message += (
                                 f"🎮 **{game['name']}**\n"
-                                f"💸 Harga setelah diskon: Rp {game['price']:,}\n"
-                                f"🔗 [Link ke Steam Store]({game['url']})\n\n"
+                                f"💸 Discounted Price: Rp {game['price']:,}\n"
+                                f"🔗 [Link to Steam Store]({game['url']})\n\n"
                             )
                         await channel.send(message)
 
     def search_steam_games(self, game_name=None, max_price=None):
-        """Mencari game di Steam berdasarkan nama dan harga (opsional)."""
+        """Search for games on Steam by name and price (optional)."""
         url = f"https://store.steampowered.com/api/storesearch/?term={game_name}&cc=ID&l=indonesian"
         try:
             response = requests.get(url, timeout=10)
             if response.status_code != 200:
-                print(f"Error: API Steam mengembalikan status {response.status_code}")
+                print(f"Error: Steam API returned status {response.status_code}")
                 return []
 
             data = response.json()
@@ -129,9 +129,9 @@ class SteamNotifier(commands.Cog):
                 if isinstance(price_data, dict):
                     initial_price = price_data.get("initial", 0) / 100
                     final_price = price_data.get("final", 0) / 100
-                    price = f"Rp {int(final_price):,}" if final_price else "Gratis"
+                    price = f"Rp {int(final_price):,}" if final_price else "Free"
                 else:
-                    price = "Gratis" if price_data == 0 else f"Rp {int(price_data) / 100:,}"
+                    price = "Free" if price_data == 0 else f"Rp {int(price_data) / 100:,}"
 
                 if max_price and final_price and final_price <= max_price:
                     games.append({
@@ -148,16 +148,16 @@ class SteamNotifier(commands.Cog):
 
             return games
         except Exception as e:
-            print(f"Error saat mengambil data dari API Steam: {e}")
+            print(f"Error when fetching data from Steam API: {e}")
             return []
 
     def get_discounted_games(self):
-        """Ambil daftar game dengan diskon di bawah harga maksimum."""
+        """Get a list of games with discounts below the maximum price."""
         url = "https://store.steampowered.com/api/featuredcategories/?cc=ID&l=indonesian"
         try:
             response = requests.get(url, timeout=10)
             if response.status_code != 200:
-                print(f"Error: API Steam mengembalikan status {response.status_code}")
+                print(f"Error: Steam API returned status {response.status_code}")
                 return []
 
             data = response.json()
@@ -176,7 +176,7 @@ class SteamNotifier(commands.Cog):
 
             return games
         except Exception as e:
-            print(f"Error saat mengambil data dari API Steam: {e}")
+            print(f"Error when fetching data from Steam API: {e}")
             return []
 
 def setup(bot):
